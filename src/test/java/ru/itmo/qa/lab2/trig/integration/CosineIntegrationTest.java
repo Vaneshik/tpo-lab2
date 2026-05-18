@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.itmo.qa.lab2.stub.SineStub;
 import ru.itmo.qa.lab2.trig.Cosine;
@@ -26,9 +25,6 @@ class CosineIntegrationTest {
     @Mock
     private Sine mockSin;
 
-    @Spy
-    private Sine spySin;
-
     @Test
     void shouldCalculateWithSineStub() {
         Cosine cos = new Cosine(new SineStub());
@@ -38,9 +34,10 @@ class CosineIntegrationTest {
 
     @Test
     void shouldCallSineFunction() {
-        Cosine cos = new Cosine(spySin);
+        when(mockSin.calculate(any(BigDecimal.class), any(BigDecimal.class))).thenReturn(BigDecimal.ONE);
+        Cosine cos = new Cosine(mockSin);
         cos.calculate(new BigDecimal("1"), PRECISION);
-        verify(spySin, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
+        verify(mockSin, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
     }
 
     @ParameterizedTest(name = "mock.cos({0}) = {1}")

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.itmo.qa.lab2.log.BaseNLogarithm;
 import ru.itmo.qa.lab2.log.NaturalLogarithm;
@@ -23,14 +22,13 @@ class LogarithmIntegrationTest {
 
     @Mock
     private NaturalLogarithm mockLn;
-    @Spy
-    private NaturalLogarithm spyLn;
 
     @Test
     void shouldCallNaturalLogarithm() {
-        BaseNLogarithm log3 = new BaseNLogarithm(3, spyLn);
+        when(mockLn.calculate(any(BigDecimal.class), any(BigDecimal.class))).thenReturn(BigDecimal.ONE);
+        BaseNLogarithm log3 = new BaseNLogarithm(3, mockLn);
         log3.calculate(new BigDecimal("993"), new BigDecimal("0.001"));
-        verify(spyLn, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
+        verify(mockLn, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
     }
 
     @ParameterizedTest(name = "mock.log3({0}) = {1}")

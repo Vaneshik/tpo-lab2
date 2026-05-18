@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.itmo.qa.lab2.stub.CosineStub;
 import ru.itmo.qa.lab2.stub.SineStub;
@@ -27,9 +26,6 @@ class SecantIntegrationTest {
 
     @Mock
     private Cosine mockCos;
-
-    @Spy
-    private Cosine spyCos;
 
     @Mock
     private Sine mockSin;
@@ -59,9 +55,10 @@ class SecantIntegrationTest {
 
     @Test
     void shouldCallCosineFunction() {
-        Secant sec = new Secant(spyCos);
+        when(mockCos.calculate(any(BigDecimal.class), any(BigDecimal.class))).thenReturn(BigDecimal.ONE);
+        Secant sec = new Secant(mockCos);
         sec.calculate(new BigDecimal("986"), PRECISION);
-        verify(spyCos, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
+        verify(mockCos, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
     }
 
     @ParameterizedTest(name = "mock.sec({0}) = {1}")

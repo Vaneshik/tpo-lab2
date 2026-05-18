@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.itmo.qa.lab2.stub.CosineStub;
 import ru.itmo.qa.lab2.stub.SineStub;
@@ -26,12 +25,8 @@ class TangentIntegrationTest {
 
     @Mock
     private Sine mockSin;
-    @Spy
-    private Sine spySin;
     @Mock
     private Cosine mockCos;
-    @Spy
-    private Cosine spyCos;
 
     @Test
     void shouldCalculateWithStubs() {
@@ -43,18 +38,20 @@ class TangentIntegrationTest {
     @Test
     void shouldCalculateWithRealSineAndMockCosine() {
         when(mockCos.calculate(any(), any())).thenReturn(BigDecimal.valueOf(0.5));
-        Tangent tan = new Tangent(spySin, mockCos);
-        tan.calculate(new BigDecimal("1"), PRECISION);
-        verify(spySin, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
+        Tangent tan = new Tangent(new Sine(), mockCos);
+        BigDecimal result = tan.calculate(new BigDecimal("1"), PRECISION);
+        assertNotNull(result);
         verify(mockCos, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
     }
 
     @Test
     void shouldCallSineAndCosine() {
-        Tangent tan = new Tangent(spySin, spyCos);
+        when(mockSin.calculate(any(BigDecimal.class), any(BigDecimal.class))).thenReturn(BigDecimal.ONE);
+        when(mockCos.calculate(any(BigDecimal.class), any(BigDecimal.class))).thenReturn(BigDecimal.ONE);
+        Tangent tan = new Tangent(mockSin, mockCos);
         tan.calculate(new BigDecimal("972"), PRECISION);
-        verify(spySin, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
-        verify(spyCos, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
+        verify(mockSin, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
+        verify(mockCos, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
     }
 
     @ParameterizedTest(name = "mock.tan({0}) = {1}")

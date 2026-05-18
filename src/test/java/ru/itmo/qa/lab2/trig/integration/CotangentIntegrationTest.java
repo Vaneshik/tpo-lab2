@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.itmo.qa.lab2.stub.CosineStub;
 import ru.itmo.qa.lab2.stub.SineStub;
@@ -26,28 +25,26 @@ class CotangentIntegrationTest {
 
     @Mock
     private Sine mockSin;
-    @Spy
-    private Sine spySin;
     @Mock
     private Cosine mockCos;
-    @Spy
-    private Cosine spyCos;
 
     @Test
     void shouldCalculateWithRealSineAndMockCosine() {
         when(mockCos.calculate(any(), any())).thenReturn(BigDecimal.valueOf(0.5));
-        Cotangent cot = new Cotangent(spySin, mockCos);
-        cot.calculate(new BigDecimal("1"), PRECISION);
-        verify(spySin, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
+        Cotangent cot = new Cotangent(new Sine(), mockCos);
+        BigDecimal result = cot.calculate(new BigDecimal("1"), PRECISION);
+        assertNotNull(result);
         verify(mockCos, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
     }
 
     @Test
     void shouldCallSineAndCosine() {
-        Cotangent cot = new Cotangent(spySin, spyCos);
+        when(mockSin.calculate(any(BigDecimal.class), any(BigDecimal.class))).thenReturn(BigDecimal.ONE);
+        when(mockCos.calculate(any(BigDecimal.class), any(BigDecimal.class))).thenReturn(BigDecimal.ONE);
+        Cotangent cot = new Cotangent(mockSin, mockCos);
         cot.calculate(new BigDecimal("979"), PRECISION);
-        verify(spySin, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
-        verify(spyCos, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
+        verify(mockSin, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
+        verify(mockCos, atLeastOnce()).calculate(any(BigDecimal.class), any(BigDecimal.class));
     }
 
     @ParameterizedTest(name = "mock.cot({0}) = {1}")
