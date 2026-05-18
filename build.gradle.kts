@@ -27,7 +27,6 @@ dependencies {
     implementation("org.projectlombok:lombok:${lombokVersion}")
     implementation("ch.obermuhlner:big-math:2.3.2")
     implementation("org.apache.commons:commons-csv:1.13.0")
-    implementation("org.jfree:jfreechart:1.5.5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")

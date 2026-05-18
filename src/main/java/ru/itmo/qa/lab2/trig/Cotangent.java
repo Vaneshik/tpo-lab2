@@ -11,8 +11,8 @@ import static java.math.RoundingMode.HALF_EVEN;
 
 public class Cotangent extends AbstractFunction {
 
-    private final Sine sine;
-    private final Cosine cosine;
+    private final AbstractFunction sine;
+    private final AbstractFunction cosine;
 
     public Cotangent() {
         super();
@@ -20,7 +20,7 @@ public class Cotangent extends AbstractFunction {
         this.cosine = new Cosine();
     }
 
-    public Cotangent(Sine sine, Cosine cosine) {
+    public Cotangent(AbstractFunction sine, AbstractFunction cosine) {
         super();
         this.sine = sine;
         this.cosine = cosine;

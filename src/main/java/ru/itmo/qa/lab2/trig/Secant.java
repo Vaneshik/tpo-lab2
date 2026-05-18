@@ -10,14 +10,14 @@ import static java.math.RoundingMode.HALF_EVEN;
 
 public class Secant extends AbstractFunction {
 
-    private final Cosine cosine;
+    private final AbstractFunction cosine;
 
     public Secant() {
         super();
         this.cosine = new Cosine();
     }
 
-    public Secant(Cosine cosine) {
+    public Secant(AbstractFunction cosine) {
         super();
         this.cosine = cosine;
     }

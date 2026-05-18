@@ -11,8 +11,8 @@ import static java.math.RoundingMode.HALF_EVEN;
 
 public class Tangent extends AbstractFunction {
 
-    private final Sine sine;
-    private final Cosine cosine;
+    private final AbstractFunction sine;
+    private final AbstractFunction cosine;
 
     public Tangent() {
         super();
@@ -20,7 +20,7 @@ public class Tangent extends AbstractFunction {
         this.cosine = new Cosine();
     }
 
-    public Tangent(Sine sine, Cosine cosine) {
+    public Tangent(AbstractFunction sine, AbstractFunction cosine) {
         super();
         this.sine = sine;
         this.cosine = cosine;
